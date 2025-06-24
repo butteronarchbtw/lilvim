@@ -14,6 +14,10 @@
 --- gc        : Comment selection
 ---
 
+-- Line Numbering
+vim.o.rnu = true
+vim.o.nu = true
+
 -- Indentation
 vim.o.tabstop = 4
 vim.o.shiftwidth = 4
