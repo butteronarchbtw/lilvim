@@ -54,3 +54,6 @@ vim.keymap.set("ca", "grep", function()
 	end
 	return "grep"
 end, { expr = true, replace_keycodes = false })
+
+vim.keymap.set("n", "<leader>pg", ":Grep ", { desc = "Project Grep" })
+vim.keymap.set("n", "<leader>g", ":vimgrep ", { desc = "fast file local Grep" })

@@ -23,6 +23,10 @@
 --- - Visual
 ---   - d  : Delete selected quickfix entries
 
+vim.keymap.set("n", "<leader>q", function()
+	vim.diagnostic.setqflist()
+end, { desc = "display native vim Quickfix list" })
+
 local function delete_quickfix_entries()
 	local is_quickfix = vim.fn.getwininfo(vim.api.nvim_get_current_win())[1].quickfix == 1
 	if not is_quickfix then

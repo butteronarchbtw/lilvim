@@ -35,13 +35,13 @@ vim.o.smartcase  = true -- unless search contains uppercase
 ---
 ---@seealso lil-grep lil-quickfix
 
-vim.keymap.set("n", "<leader>e", ":Ex<cr>", { desc = "Open file explorer" })
+vim.keymap.set("n", "<leader>pv", ":Ex<cr>", { desc = "Project View" })
 
 if vim.fn.executable("fzf") == 1 then
 	local fzf_bin_path = vim.fn.exepath("fzf")
 	if fzf_bin_path ~= "" then
 		local fzf_plugin_path = string.gsub(fzf_bin_path, "bin", "opt")
 		vim.opt.runtimepath:append(fzf_plugin_path)
-		vim.keymap.set("n", "<leader>f", ":FZF<cr>", { desc = "Fuzzy find" })
+		vim.keymap.set("n", "<leader>pf", ":FZF<cr>", { desc = "Project Find" })
 	end
 end

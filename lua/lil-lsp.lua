@@ -48,14 +48,20 @@ vim.o.signcolumn = "yes" -- always show sign column (reduce layout shift)
 
 vim.keymap.set("n", "gq", function() vim.lsp.buf.format() end, { desc = "Format file" })
 
+vim.keymap.set("i", "<C-Space>", "<C-x><C-o>", { desc = "display completions" })
+
+vim.lsp.config("*", {
+	root_markers = { ".editorconfig", ".git" },
+})
+
 vim.lsp.config("lua_ls", {
 	cmd = { "lua-language-server" },
+	root_markers = { ".luarc.json", ".luarc.jsonc", vim.uv.cwd() },
 	filetypes = { "lua" },
-	root_markers = { ".luarc.json", ".luarc.jsonc", ".luacheckrc", ".stylua.toml", "stylua.toml", "selene.toml", "selene.yml", ".git" },
 	settings = {
 		Lua = {
 			runtime = {
-				version = "LuaJIT"
+				version = "LuaJIT",
 			},
 			workspace = {
 				checkThirdParty = false,
@@ -66,9 +72,32 @@ vim.lsp.config("lua_ls", {
 })
 vim.lsp.enable("lua_ls")
 
+vim.lsp.config("rust_analyzer", {
+	cmd = { "rust-analyzer" },
+	root_markers = { "Cargo.toml" },
+	filetypes = { "rust" },
+	settings = {},
+})
+vim.lsp.enable("rust_analyzer")
+
+vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+	pattern = "*",
+	callback = function()
+		vim.diagnostic.open_float(nil, { focus = false })
+	end,
+})
+
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = vim.api.nvim_create_augroup("LilLspAttach", { clear = false }),
 	callback = function(event)
 		vim.lsp.completion.enable(true, event.data.client_id, event.buf, { autotrigger = false })
 	end,
 })
+
+vim.api.nvim_create_user_command("LspLogClear", function()
+	local lsplogpath = vim.fn.stdpath("state") .. "/lsp.log"
+	print(lsplogpath)
+	if io.close(io.open(lsplogpath, "w+b")) == false then
+		vim.notify("Clearing LSP Log failed.", vim.log.levels.WARN)
+	end
+end, { nargs = 0 })
